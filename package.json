@@ -1,0 +1,49 @@
+{
+  "name": "dsh-use-codex",
+  "displayName": "DSH Use Codex",
+  "description": "通过 DeepSeek Harness 工具调用本机 Codex CLI 执行独立任务。",
+  "version": "0.3.0",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "lib/",
+    "README.md",
+    "README.en.md",
+    "SECURITY.md",
+    "LICENSE",
+    "cordis.patch.yml"
+  ],
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "codex",
+    "codex-cli",
+    "agent",
+    "delegation"
+  ],
+  "scripts": {
+    "test": "node selftest.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "author": "chaorenzeng",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaorenzeng/dsh-use-codex.git"
+  },
+  "homepage": "https://github.com/chaorenzeng/dsh-use-codex#readme",
+  "bugs": {
+    "url": "https://github.com/chaorenzeng/dsh-use-codex/issues"
+  }
+}

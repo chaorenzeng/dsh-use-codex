@@ -1,0 +1,19 @@
+# Public-safe default bundle patch for dsh-use-codex.
+# Keep machine-specific paths in your DSH profile patch, not in this repository.
+#
+# Security defaults:
+#   - enabled: false until the host explicitly opts in
+#   - workspace-write sandbox for codex_run
+#   - danger-full-access disabled
+- insert:
+    - id: use-codex
+      name: dsh-use-codex
+      config:
+        enabled: false
+        bin: codex
+        defaultCwd: /tmp
+        allowedRoots:
+          - /tmp
+        allowDangerFullAccess: false
+        timeoutSec: 900
+        maxOutputChars: 20000
