@@ -319,7 +319,7 @@ codex exec \
 ## 开发与测试
 
 ```bash
-git clone <YOUR_REPOSITORY_URL>
+git clone https://github.com/chaorenzeng/dsh-use-codex.git
 cd dsh-use-codex
 npm test
 ```

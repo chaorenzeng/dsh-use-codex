@@ -319,7 +319,7 @@ See [SECURITY.md](SECURITY.md) for the full security policy.
 ## Development and testing
 
 ```bash
-git clone <YOUR_REPOSITORY_URL>
+git clone https://github.com/chaorenzeng/dsh-use-codex.git
 cd dsh-use-codex
 npm test
 ```
