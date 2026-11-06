@@ -2,7 +2,7 @@
   "name": "dsh-use-codex",
   "displayName": "DSH Use Codex",
   "description": "通过 DeepSeek Harness 工具调用本机 Codex CLI 执行独立任务；danger-full-access 支持宿主许可 + 运行时开关双重授权。",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -52,5 +52,8 @@
   "homepage": "https://github.com/chaorenzeng/dsh-use-codex#readme",
   "bugs": {
     "url": "https://github.com/chaorenzeng/dsh-use-codex/issues"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "^3.18.4"
   }
 }
