@@ -78,7 +78,7 @@ const toggle = registered.get('codex_switch');
 
 check('插件名', name === 'use-codex');
 check('声明 tools 注入', inject.includes('tools'));
-check('注册 3 个工具', registered.size === 3, [...registered.keys()].join(', '));
+check('注册 4 个工具', registered.size === 4, [...registered.keys()].join(', '));
 
 check('空任务被拒绝', (await run.execute({ task: '   ' })).includes('任务不能为空'));
 check('不存在目录被拒绝', (await run.execute({ task: 'x', cwd: join(testRoot, 'missing') })).includes('不存在'));
@@ -97,7 +97,7 @@ await toggle.execute({ enabled: true });
 const runResult = await run.execute({ task: '只输出测试结果' });
 check('正常执行返回假 Codex 输出', runResult.includes('FAKE_CODEX_OK'), runResult.split('\n')[0]);
 const argv = readFileSync(argsFile, 'utf8').trim().split('\n');
-check('默认使用 workspace-write', argv.includes('workspace-write'));
+check('默认使用 workspace-write（宿主未开启危险模式）', argv.includes('workspace-write'));
 check('使用非持久会话参数', argv.includes('--ephemeral'));
 check('任务作为最后一个参数传入', argv.at(-1) === '只输出测试结果');
 
@@ -114,8 +114,49 @@ const timeoutResult = await run.execute({ task: '触发超时', timeoutSec: 1 })
 delete process.env.CODEX_FAKE_SLEEP;
 check('超时能够终止子进程', timeoutResult.includes('timeout'), timeoutResult.split('\n')[0]);
 
+const danger = registered.get('codex_danger');
+check('codex_danger 已注册', typeof danger === 'function' || danger?.execute != null);
+
+const dangerOff = await danger.execute({ enabled: false });
+check('宿主未开启时 codex_danger 无效', dangerOff.includes('宿主配置未开启'));
+
+// --- scenario 2: host config allows danger; codex_danger controls runtime default ---
+const registered2 = new Map();
+const ctx2 = {
+  logger: { info: () => {}, warn: () => {} },
+  tools: { register(t) { registered2.set(t.name, t); return () => registered2.delete(t.name); } },
+};
+apply(ctx2, {
+  enabled: true,
+  bin: fakeBin,
+  defaultCwd: allowedRoot,
+  allowedRoots: [allowedRoot],
+  allowDangerFullAccess: true,
+  timeoutSec: 30,
+  maxOutputChars: 4000,
+});
+const run2 = registered2.get('codex_run');
+const danger2 = registered2.get('codex_danger');
+const status2 = registered2.get('codex_status');
+
+const onMsg = await danger2.execute({ enabled: true });
+check('宿主开启后 codex_danger 可打开', onMsg.includes('危险模式已打开'), onMsg);
+const dangerRun = await run2.execute({ task: '危险模式测试' });
+const dangerArgv = readFileSync(argsFile, 'utf8').trim().split('\n');
+check('危险模式打开后默认 danger-full-access', dangerArgv.includes('danger-full-access'), dangerArgv.join(' '));
+const statusDanger = await status2.execute({});
+check('状态显示危险模式当前打开', statusDanger.includes('允许且当前打开'));
+
+await danger2.execute({ enabled: false });
+const safeArgv0 = readFileSync(argsFile, 'utf8');
+const safeRun = await run2.execute({ task: '回到安全模式' });
+const safeArgv = readFileSync(argsFile, 'utf8').trim().split('\n');
+check('codex_danger 关闭后默认回到 workspace-write', safeArgv.includes('workspace-write'), safeArgv.join(' '));
+const statusSafe = await status2.execute({});
+check('状态显示危险模式当前关闭', statusSafe.includes('允许但当前关闭'));
+
 try {
-  assert.equal(registered.size, 3);
+  assert.equal(registered.size, 4);
 } catch (error) {
   console.error(error);
   failed += 1;

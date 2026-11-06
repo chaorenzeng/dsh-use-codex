@@ -262,6 +262,16 @@ Reports:
 - timeout and output limits
 - a summary of the most recent run in the current DSH process
 
+### `codex_danger`
+
+Runtime toggle for `danger-full-access` (effective when the host config sets `allowDangerFullAccess: true`).
+
+| Param | Type | Required | Description |
+|---|---|---|---|
+| `enabled` | `boolean` | yes | `true` enables danger mode (default sandbox becomes `danger-full-access`), `false` disables it (back to `workspace-write`) |
+
+When enabled, the **next** `codex_run` defaults to `danger-full-access` (no sandbox: unrestricted read/write, network access, arbitrary commands). This only changes the default; an explicit `sandbox` argument is untouched. The state persists across DSH restarts.
+
 ### `codex_switch`
 
 | Argument | Type | Required | Description |

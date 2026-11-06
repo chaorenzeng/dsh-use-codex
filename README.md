@@ -29,11 +29,11 @@
 ## 功能特性
 
 - **自然语言委派**：在 DSH 中说“让 Codex 做……”或“交给 Codex 执行……”。
-- **三个内置工具**：任务执行、状态检查、即时开关。
+- **四个内置工具**：任务执行、状态检查、危险模式开关、即时启停开关。
 - **工作目录白名单**：只允许 Codex 在显式授权的真实目录中运行。
 - **软链逃逸防护**：同时解析工作目录与白名单的真实路径。
 - **默认安全沙箱**：默认使用 Codex 的 `workspace-write` 模式。
-- **危险模式双重授权**：`danger-full-access` 必须由宿主配置显式允许。
+- **危险模式双重授权**：`danger-full-access` 必须由宿主配置 `allowDangerFullAccess: true` 允许，再由 `codex_danger` 运行时开关打开。
 - **无 shell 拼接**：任务正文作为单个 argv 参数传递，避免 shell 注入。
 - **进程组清理**：超时或取消时终止完整 Codex 进程组。
 - **输出限长**：限制 stdout/stderr，避免单次结果淹没会话。
@@ -248,7 +248,12 @@ DSH 的模型会按需调用 `codex_run`。任务应写清目标、范围、约�
 | `sandbox` | `string` | 否 | `read-only`、`workspace-write` 或 `danger-full-access` |
 | `timeoutSec` | `number` | 否 | 本次超时，不能超过插件配置的 `timeoutSec` |
 
-默认沙箱为 `workspace-write`。`danger-full-access` 默认拒绝，只有在宿主配置中设置 `allowDangerFullAccess: true` 后才可选择。
+默认沙箱由两层开关共同决定：
+
+1. **宿主配置** `allowDangerFullAccess: true|false`（profile 补丁，重启生效）——这是硬性许可，`false` 时任何方式都无法使用 `danger-full-access`
+2. **运行时开关** `codex_danger`（即时生效，持久化到状态文件）——宿主允许后，用它切换"默认沙箱"是 `danger-full-access` 还是 `workspace-write`
+
+省略 `sandbox` 参数时：宿主允许且 `codex_danger` 处于打开状态 → `danger-full-access`；否则 → `workspace-write`。显式传入的 `sandbox` 始终优先于默认值。
 
 ### `codex_status`
 
@@ -261,6 +266,16 @@ DSH 的模型会按需调用 `codex_run`。任务应写清目标、范围、约�
 - 危险模式是否允许
 - 超时与输出限制
 - 当前 DSH 进程内最近一次调用的结果摘要
+
+### `codex_danger`
+
+切换 `danger-full-access` 的运行时开关（宿主 `allowDangerFullAccess: true` 时有效）。
+
+| 参数 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| `enabled` | `boolean` | 是 | `true` 打开危险模式（默认沙箱变 `danger-full-access`），`false` 关闭（回到 `workspace-write`） |
+
+打开后**下一次** `codex_run` 默认以 `danger-full-access` 运行（无沙箱：可读写任意路径、访问网络、执行任意命令）。此开关只影响默认沙箱，不影响显式传入的 `sandbox` 参数。状态持久化，重启 DSH 后保留。
 
 ### `codex_switch`
 
