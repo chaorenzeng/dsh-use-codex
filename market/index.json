@@ -1,0 +1,84 @@
+{
+  "format": 1,
+  "title": {
+    "en": "DSH Use Codex",
+    "zh": "DSH Use Codex"
+  },
+  "description": {
+    "en": "Delegate focused tasks from DeepSeek Harness to a local Codex CLI.",
+    "zh": "把 DeepSeek Harness 中的独立任务交给本机 Codex CLI 执行。"
+  },
+  "metadata": {
+    "categories": {
+      "developer-tools": {
+        "title": {
+          "en": "Developer Tools",
+          "zh": "开发者工具"
+        }
+      }
+    },
+    "labels": {
+      "codex": {
+        "title": {
+          "en": "Codex",
+          "zh": "Codex"
+        }
+      },
+      "agent-delegation": {
+        "title": {
+          "en": "Agent Delegation",
+          "zh": "Agent 委派"
+        }
+      }
+    },
+    "sortKeys": {}
+  },
+  "plugins": [
+    {
+      "name": "dsh-use-codex",
+      "title": {
+        "en": "DSH Use Codex",
+        "zh": "DSH Use Codex"
+      },
+      "description": {
+        "en": "Delegate coding, debugging, repository analysis, and batch file tasks from DSH to a local Codex CLI with workspace allowlists and safe sandbox defaults.",
+        "zh": "在 DSH 中把编码、调试、仓库分析和批量文件任务交给本机 Codex CLI，并支持工作目录白名单与安全沙箱。"
+      },
+      "author": "chaorenzeng",
+      "homepage": "https://github.com/chaorenzeng/dsh-use-codex",
+      "repository": {
+        "url": "https://github.com/chaorenzeng/dsh-use-codex"
+      },
+      "metadata": {
+        "category": "developer-tools",
+        "keywords": [
+          "dsh-plugin",
+          "deepseek-harness",
+          "codex",
+          "codex-cli",
+          "agent",
+          "delegation"
+        ],
+        "labels": [
+          "codex",
+          "agent-delegation"
+        ],
+        "sortKeys": {}
+      },
+      "versions": [
+        {
+          "version": "0.3.0",
+          "publishTimestamp": 1793927683,
+          "source": {
+            "type": "git",
+            "url": "https://github.com/chaorenzeng/dsh-use-codex.git",
+            "commit": "4ea424f66a3e897ee5aee16be00c37e26a37a555"
+          },
+          "engines": {
+            "dsh": ">=0.2.1-rc.1 <0.3.0"
+          }
+        }
+      ]
+    }
+  ]
+}
