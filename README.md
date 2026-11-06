@@ -66,6 +66,16 @@ codex login status
 
 ## 安装
 
+### 通过 DSH 插件市场索引安装
+
+在 DSH 的「发现 → 插件市场 → 添加索引源」中添加：
+
+```text
+https://raw.githubusercontent.com/chaorenzeng/dsh-use-codex/main/market/index.json
+```
+
+然后搜索 **DSH Use Codex** 并安装。市场索引固定到不可变的 Git 提交，实际安装来源仍是本仓库。
+
 ### 1. 获取源码
 
 ```bash

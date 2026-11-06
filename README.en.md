@@ -66,6 +66,16 @@ codex login status
 
 ## Installation
 
+### Install through the DSH plugin market index
+
+In DSH, open **Discover → Plugin Market → Add index source** and add:
+
+```text
+https://raw.githubusercontent.com/chaorenzeng/dsh-use-codex/main/market/index.json
+```
+
+Search for **DSH Use Codex** and install it. The market index pins an immutable Git commit; the actual installation source remains this repository.
+
 ### 1. Get the source
 
 ```bash
